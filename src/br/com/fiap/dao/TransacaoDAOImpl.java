@@ -13,6 +13,18 @@ import java.util.List;
 
 public class TransacaoDAOImpl implements TransacaoDAO{
 
+    private TransacaoDAOImpl() {}
+
+    private static TransacaoDAOImpl instance;
+
+    public static TransacaoDAOImpl getInstance() {
+        if (instance == null) {
+            instance = new TransacaoDAOImpl();
+        }
+
+        return instance;
+    }
+
     private Connection conexao;
 
     @Override
@@ -28,10 +40,8 @@ public class TransacaoDAOImpl implements TransacaoDAO{
 
             stmt =
                     conexao.prepareStatement(
-                            "INSERT INTO t_transacao (cd_transacao, vl_valor, ds_descricao, ds_tags, dt_data_transacao, ds_tipo_transacao, t_usuario_id_usuario) VALUES (SQ_ID_TRAN, ?, ?, ?, ?, ?, ?)"
+                            "INSERT INTO t_transacao (cd_transacao, vl_valor, ds_descricao, ds_tags, dt_data_transacao, ds_tipo_transacao, t_usuario_id_usuario) VALUES (SQ_ID_TRAN.NEXTVAL, ?, ?, ?, ?, ?, ?)"
                     );
-
-            String randomId = String.valueOf(Math.floor(Math.random()));
 
             stmt.setInt(1, transacao.getValor());
             stmt.setString(2, transacao.getDescricao());
@@ -76,7 +86,7 @@ public class TransacaoDAOImpl implements TransacaoDAO{
         try {
             conexao = AppDBManager.getInstance().getConexao();
 
-            stmt = conexao.prepareStatement("SELECT * FROM T_CARTAO");
+            stmt = conexao.prepareStatement("SELECT * FROM T_TRANSACAO");
 
             rs = stmt.executeQuery();
 
@@ -96,6 +106,8 @@ public class TransacaoDAOImpl implements TransacaoDAO{
                 TR.setTipoTransacao(rs.getString("ds_tipo_transacao"));
                 TR.setIdUsuario(rs.getString("t_usuario_id_usuario"));
                 TR.setDataTransacao(dtTrans);
+
+                lista.add(TR);
             }
         } catch (SQLException e) {
             try {

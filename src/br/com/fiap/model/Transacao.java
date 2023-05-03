@@ -11,7 +11,7 @@ public class Transacao {
     private String tipoTransacao;
     private String IdUsuario;
 
-    Transacao(int valor, String descricao, String tags, Calendar dataTransacao, String tipoTransacao, String tUsuarioIdUsuario, String cdTransacao){
+    public Transacao(int valor, String descricao, String tags, Calendar dataTransacao, String tipoTransacao, String tUsuarioIdUsuario, String cdTransacao){
         this.setCd_transacao(cdTransacao); ;
         this.setValor(valor);
         this.setDescricao(descricao);
